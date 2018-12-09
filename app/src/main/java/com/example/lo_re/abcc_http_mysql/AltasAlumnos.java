@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +52,7 @@ public class AltasAlumnos extends AppCompatActivity {
         if (ni!=null && ni.isConnected()){
             //conectarse, enviar datos para guardar  en MySQL
             new AgregarAlumno().execute(nc,n,pa,sa,e,s,c);
+            Toast toast1 = Toast.makeText(this, "Registro agregado correctamente", Toast.LENGTH_SHORT);
         }
 
     }//Método agregar alumno

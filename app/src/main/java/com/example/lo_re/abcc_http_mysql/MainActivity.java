@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     public void abrirActivities(View view){
         Intent i;
         switch (view.getId()){
-            case R.id.btnActivityAgregar: i= new Intent(this, AltasAlumnos.class);
+            case R.id.btnActivityGuardar: i= new Intent(this, AltasAlumnos.class);
                 startActivity(i);
                 break;
             case R.id.btnBuscar: i= new Intent(this, ActivityConsultas.class);

@@ -1,7 +1,9 @@
 package com.example.lo_re.abcc_http_mysql;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,39 +53,64 @@ public class ActivityConsultas extends AppCompatActivity  {
                 Datos d = arrayList.get(position);
                 nc = d.getNc();
                 Log.i("Dato lv", d.getNc());
-                dialog();
+                dialog(nc, d);
 
             }
         });
     }
-    public void dialog(){
-        AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
-        dialogo.setTitle("Eliminar registro");
-        dialogo.setMessage("¿Estás seguro de eliminar este dato?");
-        dialogo.setCancelable(false);
-        dialogo.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogo1, int id) {
-                //codigo
-            }
-        });
-        dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogo1, int id) {
-            }
-        });
-        dialogo.show();
+    public void dialog(final String nc, final Datos datos){
+
+        new AlertDialog.Builder(ActivityConsultas.this)
+                .setTitle("Three Buttons")
+                .setMessage("Where do you want to go?")
+                .setPositiveButton("MODIFICAR DATOS",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                modificar(datos);
+                                dialog.cancel();
+                            }
+                        })
+                .setNeutralButton("CANCELAR",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.i("","You want to go to the CENTER.");
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("ELIMINAR REGISTRO",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.i("Mensaje eliminar", "Eliminar alumno");
+
+                                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE); //Verificar conectividad wifi
+                                NetworkInfo ni = cm.getActiveNetworkInfo();
+
+                                if (ni!=null && ni.isConnected()){
+                                    //conectarse, enviar datos para guardar  en MySQL
+                                    new EliminarAlumnos().execute(nc);
+                                }
+                                Log.i("","You want to go to the LEFT.");
+                                dialog.cancel();
+                                Toast toast1 = Toast.makeText(getApplicationContext(), "Registro eliminado correctamente", Toast.LENGTH_SHORT);
+                                toast1.show();
+                            }
+                        }).show();
+
     }
-    public void eliminarAlumno(View view){
-        Log.i("Mensaje eliminar", "Eliminar alumno");
-
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE); //Verificar conectividad wifi
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-
-        if (ni!=null && ni.isConnected()){
-            //conectarse, enviar datos para guardar  en MySQL
-            new EliminarAlumnos().execute(nc);
-        }
-
-    }//Método agregar alumno
+    public void modificar(Datos datos){
+        Intent i= new Intent(this, ActivityCambios.class);
+        i.putExtra("nc",datos.getNc());
+        i.putExtra("n",datos.getN());
+        i.putExtra("pa",datos.getPa());
+        i.putExtra("sa",datos.getSa());
+        i.putExtra("e",datos.getE());
+        i.putExtra("s",datos.getS());
+        i.putExtra("c",datos.getC());
+        startActivity(i);
+    }
 
 
     class MostrarAlumnos extends AsyncTask<String, String, String>{
@@ -94,25 +122,7 @@ public class ActivityConsultas extends AppCompatActivity  {
             try {
                 JSONObject jsonObject = analizadorJSON.peticionHTTP(url,"POST");
                 JSONArray jsonArray = jsonObject.getJSONArray("alumnos");
-                String cadena = "";
                 for (int i=0;i<jsonArray.length();i++){
-
-                    cadena = jsonArray.getJSONObject(i).getString("nc")+ " | "+
-                            jsonArray.getJSONObject(i).getString("n")+ " | "+
-                            jsonArray.getJSONObject(i).getString("pa")+ " | "+
-                            jsonArray.getJSONObject(i).getString("sa")+ " | "+
-                            jsonArray.getJSONObject(i).getString("e")+ " | "+
-                            jsonArray.getJSONObject(i).getString("s")+ " | "+
-                            jsonArray.getJSONObject(i).getString("c");
-                    Log.i("NC >>>>", jsonArray.getJSONObject(i).getString("nc"));
-                    Log.i("N >>>>", jsonArray.getJSONObject(i).getString("n"));
-                    Log.i("PA >>>>", jsonArray.getJSONObject(i).getString("pa"));
-                    Log.i("SA >>>>", jsonArray.getJSONObject(i).getString("sa"));
-                    Log.i("E >>>>", jsonArray.getJSONObject(i).getString("e"));
-                    Log.i("S >>>>", jsonArray.getJSONObject(i).getString("s"));
-                    Log.i("C >>>>", jsonArray.getJSONObject(i).getString("n"));
-                    //arrayList.add(cadena);
-                    //arrayList.add(new Datos("Hola","Lore","Ya","Funcionó","la ","consulta",":)"));
                     arrayList.add(new Datos(jsonArray.getJSONObject(i).getString("nc"),
                             jsonArray.getJSONObject(i).getString("n")+" ",
                             jsonArray.getJSONObject(i).getString("pa")+" ",

@@ -7,11 +7,11 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btnActivityAgregar"
+        android:id="@+id/btnActivityGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="8dp"
         android:onClick="abrirActivities"
         android:text="AGREGAR"
@@ -26,36 +26,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="8dp"
-        android:onClick="abrirActivities"
-        android:text="BUSCAR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnActivityAgregar" />
-
-    <Button
-        android:id="@+id/btnModificar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="8dp"
-        android:text="MODIFICAR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBuscar" />
-
-    <Button
-        android:id="@+id/btnEliminar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="ELIMINAR"
+        android:onClick="abrirActivities"
+        android:text="BUSCAR, MODIFICAR Y ELIMINAR"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnModificar" />
+        app:layout_constraintTop_toBottomOf="@+id/btnActivityGuardar"
+        app:layout_constraintVertical_bias="0.194" />
 
 </android.support.constraint.ConstraintLayout>
